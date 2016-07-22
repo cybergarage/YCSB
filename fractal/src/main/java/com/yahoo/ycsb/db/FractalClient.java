@@ -53,10 +53,10 @@ public class FractalClient extends DB {
   public void init() throws DBException {
     try {
       debug = Boolean.parseBoolean(getProperties().getProperty(DEBUG_PROPERTY, "false"));
-      String hosts[] = getProperties().getProperty(HOST_PROPERTY, DEFAULT_HOST).split(",");
+      String []hosts = getProperties().getProperty(HOST_PROPERTY, DEFAULT_HOST).split(",");
       String port = getProperties().getProperty(PORT_PROPERTY, Integer.toString(Node.DEFAULT_PORT));
 
-      String method[] = getProperties().getProperty(METHODS_PROPERTY, DEFAULT_METHODS).split(",");
+      String []method = getProperties().getProperty(METHODS_PROPERTY, DEFAULT_METHODS).split(",");
       if (3 <= method.length) {
         setMethod = method[0];
         getMethod = method[1];
@@ -67,9 +67,9 @@ public class FractalClient extends DB {
         System.out.println("host : ");
         int hostNo = 0;
         for (String host : hosts) {
-            hostNo++;
-            InetAddress addr = InetAddress.getByName(host); 
-            System.out.println("  [" + Integer.toString(hostNo) + "] : " + host + " (" + addr.getHostAddress() + ")");
+          hostNo++;
+          InetAddress addr = InetAddress.getByName(host);
+          System.out.println("  [" + Integer.toString(hostNo) + "] : " + host + " (" + addr.getHostAddress() + ")");
         }
         System.out.println("port : " + port);
         System.out.println("set_method : " + setMethod);
@@ -79,12 +79,14 @@ public class FractalClient extends DB {
 
       this.client = new Client();
       for (String host : hosts) {
-          InetAddress addr = InetAddress.getByName(host); 
-          Node node = new Node(addr.getHostAddress(), Integer.valueOf(port));
-          this.client.addNode(node);
+        InetAddress addr = InetAddress.getByName(host);
+        Node node = new Node(addr.getHostAddress(), Integer.valueOf(port));
+        this.client.addNode(node);
       }
 
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      throw new DBException(e);
+    }
   }
   
   /**
@@ -114,12 +116,14 @@ public class FractalClient extends DB {
     String roundKey = "/" + table + "/" + key;
     Node node = this.client.getHandleNode(roundKey);
     
-    if (!node.getRegistry(getMethod, roundKey))
+    if (!node.getRegistry(getMethod, roundKey)) {
       return Status.ERROR;
+    }
 
     JSONObject resObj = node.getResponse();
-    if (resObj == null)
+    if (resObj == null) {
       return Status.ERROR;
+    }
 
     if (debug) {
       System.out.println("read : " + roundKey + " " + resObj.toString());
@@ -127,11 +131,13 @@ public class FractalClient extends DB {
 
     try {
       JSONObject resultObj = (JSONObject)resObj.get("result");
-      if (resultObj == null)
+      if (resultObj == null) {
         return Status.ERROR;
+      }
       String values = resultObj.getString("val");
-      if (values == null)
+      if (values == null) {
         return Status.ERROR;
+      }
 
       values = URLDecoder.decode(values, "UTF-8");
       /* Disabled Base64
@@ -226,16 +232,19 @@ public class FractalClient extends DB {
         /* Disabled Base64
         roundVal = new String(Base64.getDecoder().decode(roundVal));
         */
-      } catch (Exception e) {}
+      } catch (Exception e) {
+        return Status.ERROR;
+      }
     }
 
     if (debug) {
       System.out.println("insert : " + roundKey + " " + roundVal);
     }
 
-    if (!node.setRegistry(setMethod, roundKey, roundVal))
+    if (!node.setRegistry(setMethod, roundKey, roundVal)) {
       return Status.ERROR;
-
+    }
+  
     return Status.OK;
   }
   
@@ -253,8 +262,9 @@ public class FractalClient extends DB {
     String roundKey = "/" + table + "/" + key;
     Node node = this.client.getHandleNode(roundKey);
 
-    if (!node.removeRegistry(removeMethod, roundKey))
+    if (!node.removeRegistry(removeMethod, roundKey)) {
       return Status.ERROR;
+    }
 
     return Status.OK;
   }
