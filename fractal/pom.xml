@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (C) Satoshi Konno 2016
+
+This is licensed under BSD-style license, see file COPYING.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+     <groupId>com.yahoo.ycsb</groupId>
+     <artifactId>binding-parent</artifactId>
+     <version>0.11.0-SNAPSHOT</version>
+     <relativePath>../binding-parent</relativePath>
+  </parent>
+
+  <artifactId>fractal-binding</artifactId>
+  <name>Fractal DB Binding</name>
+  <packaging>jar</packaging>
+
+  <repositories>
+    <repository>
+      <id>org.cybergarage.round</id>
+      <url>http://repo.cybergarage.org:8080/maven/repo/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+     <dependency>
+       <groupId>com.yahoo.ycsb</groupId>
+       <artifactId>core</artifactId>
+       <version>${project.version}</version>
+       <scope>provided</scope>
+     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cybergarage.round</groupId>
+      <artifactId>round-core</artifactId>
+      <version>[0.1,)</version>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.15</version>
+        <configuration>
+          <consoleOutput>true</consoleOutput>
+          <configLocation>../checkstyle.xml</configLocation>
+          <failOnViolation>true</failOnViolation>
+          <failsOnError>true</failsOnError>
+        </configuration>
+        <executions>
+<!--
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>checkstyle</goal>
+            </goals>
+          </execution>
+-->
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

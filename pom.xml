@@ -97,6 +97,7 @@ LICENSE file.
     <riak.version>2.0.5</riak.version>
     <aerospike.version>3.1.2</aerospike.version>
     <solr.version>5.4.0</solr.version>
+    <fractal.version>0.1.0</fractal.version>
   </properties>
 
   <modules>
@@ -136,6 +137,7 @@ LICENSE file.
     <module>solr</module>
     <module>tarantool</module>
     <!--<module>voldemort</module>-->
+    <module>fractal</module>
   </modules>
 
   <build>
