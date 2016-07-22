@@ -41,9 +41,9 @@ public class FractalClient extends DB {
   private boolean debug = false;
   private Client client = null;
 
-  private String set_method;
-  private String get_method;
-  private String remove_method;
+  private String setMethod;
+  private String getMethod;
+  private String removeMethod;
 
   /**
    * Initialize any state for this DB. Called once per DB instance; there is one
@@ -58,9 +58,9 @@ public class FractalClient extends DB {
 
       String method[] = getProperties().getProperty(METHODS_PROPERTY, DEFAULT_METHODS).split(",");
       if (3 <= method.length) {
-        set_method = method[0];
-        get_method = method[1];
-        remove_method = method[2];
+        setMethod = method[0];
+        getMethod = method[1];
+        removeMethod = method[2];
       }
 
       if (debug) {
@@ -72,9 +72,9 @@ public class FractalClient extends DB {
             System.out.println("  [" + Integer.toString(hostNo) + "] : " + host + " (" + addr.getHostAddress() + ")");
         }
         System.out.println("port : " + port);
-        System.out.println("set_method : " + set_method);
-        System.out.println("get_method : " + get_method);
-        System.out.println("remove_method : " + remove_method);
+        System.out.println("set_method : " + setMethod);
+        System.out.println("get_method : " + getMethod);
+        System.out.println("remove_method : " + removeMethod);
       }
 
       this.client = new Client();
@@ -114,7 +114,7 @@ public class FractalClient extends DB {
     String roundKey = "/" + table + "/" + key;
     Node node = this.client.getHandleNode(roundKey);
     
-    if (!node.getRegistry(get_method, roundKey))
+    if (!node.getRegistry(getMethod, roundKey))
       return Status.ERROR;
 
     JSONObject resObj = node.getResponse();
@@ -233,7 +233,7 @@ public class FractalClient extends DB {
       System.out.println("insert : " + roundKey + " " + roundVal);
     }
 
-    if (!node.setRegistry(set_method, roundKey, roundVal))
+    if (!node.setRegistry(setMethod, roundKey, roundVal))
       return Status.ERROR;
 
     return Status.OK;
@@ -253,7 +253,7 @@ public class FractalClient extends DB {
     String roundKey = "/" + table + "/" + key;
     Node node = this.client.getHandleNode(roundKey);
 
-    if (!node.removeRegistry(remove_method, roundKey))
+    if (!node.removeRegistry(removeMethod, roundKey))
       return Status.ERROR;
 
     return Status.OK;

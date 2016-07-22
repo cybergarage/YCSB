@@ -21,6 +21,7 @@ This is licensed under BSD-style license, see file COPYING.
   <repositories>
     <repository>
       <id>org.cybergarage.round</id>
+      <name>CyberGarage Maven Repository</name>
       <url>http://repo.cybergarage.org:8080/maven/repo/</url>
     </repository>
   </repositories>
